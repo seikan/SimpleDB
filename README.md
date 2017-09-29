@@ -52,10 +52,10 @@ Creates database by provides an array of `column name` and `data type`.
 // Create a database to store user data
 $db->create([
 	'user_id'		=> SimpleDB::TYPE_INT,
-  	'name'			=> SimpleDB::TYPE_STR,
-  	'email'			=> SimpleDB::TYPE_STR,
-  	'password'		=> SimpleDB::TYPE_STR,
-  	'date_created'	=> SimpleDB::TYPE_DATE,
+	'name'			=> SimpleDB::TYPE_STR,
+	'email'			=> SimpleDB::TYPE_STR,
+	'password'		=> SimpleDB::TYPE_STR,
+	'date_created'	=> SimpleDB::TYPE_DATE,
 ]);
 ```
 
