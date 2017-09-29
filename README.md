@@ -51,11 +51,11 @@ Creates database by provides an array of `column name` and `data type`.
 ```php
 // Create a database to store user data
 $db->create([
-	'user_id'		=> SimpleDB::TYPE_INT,
-	'name'			=> SimpleDB::TYPE_STR,
-	'email'			=> SimpleDB::TYPE_STR,
-	'password'		=> SimpleDB::TYPE_STR,
-	'date_created'	=> SimpleDB::TYPE_DATE,
+	'user_id'        => SimpleDB::TYPE_INT,
+	'name'           => SimpleDB::TYPE_STR,
+	'email'          => SimpleDB::TYPE_STR,
+	'password'       => SimpleDB::TYPE_STR,
+	'date_created'   => SimpleDB::TYPE_DATE,
 ]);
 ```
 
@@ -81,10 +81,10 @@ Inserts data into database.
 
 ```php
 $db->insert([
-	'name'			=> 'Skywalker',
-	'email'			=> 'skywalker@example.com',
-  	'password'		=> 'JzRRnTN34wKb',
-	'date_created'	=> 'NOW()',
+	'name'          => 'Skywalker',
+	'email'         => 'skywalker@example.com',
+  	'password'      => 'JzRRnTN34wKb',
+	'date_created'  => 'NOW()',
 ]);
 ```
 
@@ -182,10 +182,10 @@ Gets the last inserts ID.
 ```php
 // Insert a new user
 $db->insert([
-	'name'			=> 'Skywalker',
-	'email'			=> 'skywalker@example.com',
-  	'password'		=> 'JzRRnTN34wKb',
-	'date_created'	=> 'NOW()',
+	'name'          => 'Skywalker',
+	'email'         => 'skywalker@example.com',
+  	'password'      => 'JzRRnTN34wKb',
+	'date_created'  => 'NOW()',
 ]);
 
 $userId = $db->getLastId();
