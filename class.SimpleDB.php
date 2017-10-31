@@ -89,7 +89,7 @@ class SimpleDB
 		}
 
 		if (!is_writable($database)) {
-			throw new Exception('"'.$database.'" is not writable.');
+			throw new Exception('"' . $database . '" is not writable.');
 		}
 
 		$this->database = $database;
@@ -115,14 +115,14 @@ class SimpleDB
 	 *
 	 * @param array $fields
 	 *
-	 * @return bool
-	 *
 	 * @throws \Exception
+	 *
+	 * @return bool
 	 */
 	public function create($fields = [])
 	{
 		if ($this->read()) {
-			throw new Exception('Database already created in "'.$this->database.'".');
+			throw new Exception('Database already created in "' . $this->database . '".');
 		}
 
 		if (!is_array($fields)) {
@@ -138,7 +138,7 @@ class SimpleDB
 
 		foreach ($fields as $field => $type) {
 			if (!in_array($type, $this->types)) {
-				throw new Exception('Invalid data type "'.$type.'".');
+				throw new Exception('Invalid data type "' . $type . '".');
 			}
 			$this->headers[$field] = $type;
 		}
@@ -158,11 +158,11 @@ class SimpleDB
 	public function setIndexKey($field)
 	{
 		if (!isset($this->headers[$field])) {
-			throw new Exception('"'.$field.'" column not found.');
+			throw new Exception('"' . $field . '" column not found.');
 		}
 
 		if (self::TYPE_INT != $this->headers[$field]) {
-			throw new Exception('"'.$field.'" column is not a type of interger.');
+			throw new Exception('"' . $field . '" column is not a type of interger.');
 		}
 
 		$this->indexKey = $field;
@@ -172,10 +172,11 @@ class SimpleDB
 	 * Insert record into database.
 	 *
 	 * @param array $data
-	 *
-	 * @return bool
+	 * @param mixed $fields
 	 *
 	 * @throws \Exception
+	 *
+	 * @return bool
 	 */
 	public function insert($fields)
 	{
@@ -223,9 +224,9 @@ class SimpleDB
 	 * @param string $orderBy
 	 * @param int    $sort
 	 *
-	 * @return array
-	 *
 	 * @throws \Exception
+	 *
+	 * @return array
 	 */
 	public function select($column = '*', $needle = '*', $orderBy = '', $sort = self::ASC)
 	{
@@ -243,13 +244,13 @@ class SimpleDB
 
 		if ('*' == $column) {
 			foreach ($this->container as $row) {
-				if (preg_match('/'.$this->getNeedle($needle).'/i', implode('', $row))) {
+				if (preg_match('/' . $this->getNeedle($needle) . '/i', implode('', $row))) {
 					array_push($result, $row);
 				}
 			}
 		} else {
 			foreach ($this->container as $row) {
-				if (preg_match('/'.$this->getNeedle($needle).'/i', $row[$column])) {
+				if (preg_match('/' . $this->getNeedle($needle) . '/i', $row[$column])) {
 					array_push($result, $row);
 				}
 			}
@@ -278,7 +279,7 @@ class SimpleDB
 		}
 
 		for ($i = 0; $i < $this->totalRow; ++$i) {
-			if (isset($this->container[$i][$column]) && preg_match('/'.$this->getNeedle($needle).'/i', $this->container[$i][$column])) {
+			if (isset($this->container[$i][$column]) && preg_match('/' . $this->getNeedle($needle) . '/i', $this->container[$i][$column])) {
 				++$this->affectedRows;
 
 				foreach ($this->headers as $name => $type) {
@@ -305,7 +306,7 @@ class SimpleDB
 		$tmp = [];
 
 		for ($i = 0; $i < $this->totalRow; ++$i) {
-			if (!isset($this->container[$i][$column]) || !preg_match('/'.$this->getNeedle($needle).'/i', $this->container[$i][$column])) {
+			if (!isset($this->container[$i][$column]) || !preg_match('/' . $this->getNeedle($needle) . '/i', $this->container[$i][$column])) {
 				array_push($tmp, $this->container[$i]);
 			}
 		}
@@ -350,7 +351,7 @@ class SimpleDB
 	private function getNeedle($text)
 	{
 		if ('=' == substr($text, 0, 1)) {
-			return '^'.preg_replace('/([.+^$?\[\]])/', '\\\$1', substr($text, 1)).'$';
+			return '^' . preg_replace('/([.+^$?\[\]])/', '\\\$1', substr($text, 1)) . '$';
 		}
 
 		return $text;
@@ -461,9 +462,9 @@ class SimpleDB
 	/**
 	 * Save changes to database.
 	 *
-	 * @return bool
-	 *
 	 * @throws \Exception
+	 *
+	 * @return bool
 	 */
 	private function commit()
 	{
@@ -474,10 +475,10 @@ class SimpleDB
 		$out = '';
 
 		foreach ($this->headers as $name => $type) {
-			$out .= $name.'['.$type.']'.$this->separator;
+			$out .= $name . '[' . $type . ']' . $this->separator;
 		}
 
-		$out = rtrim($out, $this->separator)."\n";
+		$out = rtrim($out, $this->separator) . "\n";
 
 		if (!empty($this->container)) {
 			foreach ($this->container as $row) {
@@ -487,7 +488,7 @@ class SimpleDB
 					$item[$keys[$i]] = str_replace('"', '\\"', $row[$keys[$i]]);
 				}
 
-				$out .= '"'.implode('"'.$this->separator.'"', $item)."\"\n";
+				$out .= '"' . implode('"' . $this->separator . '"', $item) . "\"\n";
 			}
 		}
 
@@ -505,21 +506,21 @@ class SimpleDB
 	 *
 	 * @param string $text
 	 *
-	 * @return bool
-	 *
 	 * @throws \Exception
+	 *
+	 * @return bool
 	 */
 	private function write($text)
 	{
 		if (!is_writable($this->database)) {
-			throw new Exception('"'.$this->database.'" is not writable.');
+			throw new Exception('"' . $this->database . '" is not writable.');
 		}
 
 		$fp = @fopen($this->database, 'w');
 
 		if ($fp) {
 			flock($fp, 2);
-			fputs($fp, $text);
+			fwrite($fp, $text);
 			flock($fp, 3);
 			fclose($fp);
 
