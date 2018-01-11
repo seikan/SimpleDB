@@ -426,9 +426,7 @@ class SimpleDB
 		$this->container = [];
 		$item = [];
 
-		$fp = fopen($this->database, 'r');
-
-		if ($fp) {
+		if (($fp = @fopen($this->database, 'r')) !== false) {
 			$headers = fgetcsv($fp, 2048, $this->separator);
 
 			if ($headers === false) {
@@ -516,12 +514,17 @@ class SimpleDB
 			throw new Exception('"' . $this->database . '" is not writable.');
 		}
 
-		$fp = @fopen($this->database, 'w');
+		if (($fp = @fopen($this->database, 'w')) !== false) {
+			// Prevent other process from accessing the file
+			flock($fp, LOCK_EX);
 
-		if ($fp) {
-			flock($fp, 2);
+			// Write changes to file
 			fwrite($fp, $text);
-			flock($fp, 3);
+
+			// Release the lock
+			flock($fp, LOCK_UN);
+
+			// Close file
 			fclose($fp);
 
 			return true;
