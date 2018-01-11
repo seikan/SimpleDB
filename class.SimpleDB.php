@@ -161,7 +161,7 @@ class SimpleDB
 			throw new Exception('"' . $field . '" column not found.');
 		}
 
-		if (self::TYPE_INT != $this->headers[$field]) {
+		if ($this->headers[$field] != self::TYPE_INT) {
 			throw new Exception('"' . $field . '" column is not a type of interger.');
 		}
 
@@ -194,7 +194,7 @@ class SimpleDB
 			$newItem[$name] = (isset($fields[$name])) ? $this->parse($type, $fields[$name]) : '';
 		}
 
-		if (null != $this->indexKey) {
+		if ($this->indexKey != null) {
 			if (!isset($fields[$this->indexKey])) {
 				$newItem[$this->indexKey] = 1;
 
@@ -236,13 +236,13 @@ class SimpleDB
 			$this->container = $this->sort($this->container, $orderBy, $sort);
 		}
 
-		if ('*' == $needle) {
+		if ($needle == '*') {
 			return $this->container;
 		}
 
 		$result = [];
 
-		if ('*' == $column) {
+		if ($column == '*') {
 			foreach ($this->container as $row) {
 				if (preg_match('/' . $this->getNeedle($needle) . '/i', implode('', $row))) {
 					array_push($result, $row);
@@ -350,7 +350,7 @@ class SimpleDB
 	 */
 	private function getNeedle($text)
 	{
-		if ('=' == substr($text, 0, 1)) {
+		if (substr($text, 0, 1) == '=') {
 			return '^' . preg_replace('/([.+^$?\[\]])/', '\\\$1', substr($text, 1)) . '$';
 		}
 
@@ -375,7 +375,7 @@ class SimpleDB
 				break;
 
 			case self::TYPE_DATE:
-				if ('NOW()' == strtoupper($value)) {
+				if (strtoupper($value) == 'NOW()') {
 					return date('Y-m-d H:i:s');
 				}
 
@@ -404,7 +404,7 @@ class SimpleDB
 				$temp[$key] = $array[$key][$index];
 			}
 
-			(self::ASC == $order) ? asort($temp) : arsort($temp);
+			($order == self::ASC) ? asort($temp) : arsort($temp);
 
 			foreach (array_keys($temp) as $key) {
 				(is_numeric($key)) ? $sorted[] = $array[$key] : $sorted[$key] = $array[$key];
@@ -431,7 +431,7 @@ class SimpleDB
 		if ($fp) {
 			$headers = fgetcsv($fp, 2048, $this->separator);
 
-			if (false === $headers) {
+			if ($headers === false) {
 				return false;
 			}
 
